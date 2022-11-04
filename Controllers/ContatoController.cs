@@ -23,7 +23,7 @@ namespace Modulo_API.Controllers
         {
             _context.Add(contato);
             _context.SaveChanges();
-            return Ok(contato);
+            return CreatedAtAction(nameof(ObterPorId), new {id = contato.Id}, contato);
         }
 
         [HttpGet("{id}")]
@@ -35,10 +35,17 @@ namespace Modulo_API.Controllers
             return Ok(contato);
         }
 
+        [HttpGet("ObterPorNome")]
+        public IActionResult ObterPorNome(string nome)
+        {
+            var contatos = _context.Contatos.Where(x => x.Nome.Contains(nome));
+            return Ok(contatos);
+        }
+
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Contato contato)
         {
-            var contatoBanco = _context.Contatos.Find(id);
+            var contatoBanco = _context.Contatos.Find(id); 
 
             if(contatoBanco == null)
                 return NotFound();
